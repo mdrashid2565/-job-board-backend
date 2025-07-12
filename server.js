@@ -16,18 +16,12 @@ connectDB();
 const app = express();
 
 /**
- * 🔧 ✅ Updated CORS Configuration (Modular and Safe)
+ * 🔧 ✅ Updated CORS Configuration (Modular, Safe, Production-ready)
  */
 const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
 
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: allowedOrigins,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
@@ -53,5 +47,5 @@ app.use((err, req, res, next) => {
 // 🌍 Start the Server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });
