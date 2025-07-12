@@ -15,8 +15,24 @@ connectDB();
 // 🚀 Initialize Express app
 const app = express();
 
+/**
+ * 🔧 ✅ Updated CORS Configuration (Modular and Safe)
+ */
+const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true
+}));
+
 // 🔓 Global Middleware
-app.use(cors()); // Handle cross-origin requests
 app.use(express.json()); // Parse incoming JSON data
 app.use(express.urlencoded({ extended: true })); // Handle form-data if any
 
