@@ -16,26 +16,26 @@ connectDB();
 const app = express();
 
 /**
- * 🔧 ✅ Updated universal CORS config (handles preflight OPTIONS requests safely)
+ * 🔧 ✅ Final stable CORS configuration (handles preflight OPTIONS requests safely)
  */
 const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
 
-app.use(cors({
+const corsOptions = {
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, curl, Postman)
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS for preflight
   credentials: true,
-}));
+};
 
-app.options('*', cors());
-
-
-
+// ✅ Apply CORS globally before routes
+app.use(cors(corsOptions));
+app.options('*', cors(corsOptions)); // handle preflight OPTIONS requests globally
 
 // 🔓 Global Middleware
 app.use(express.json()); // Parse incoming JSON data
