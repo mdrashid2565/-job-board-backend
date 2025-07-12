@@ -21,13 +21,19 @@ const app = express();
 const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
 
 app.use(cors({
-  origin: allowedOrigins,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
 
-// 🔧 ✅ Handle preflight OPTIONS requests globally before any protected routes
 app.options('*', cors());
+
 
 
 
