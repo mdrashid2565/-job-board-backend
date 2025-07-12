@@ -42,6 +42,14 @@ app.use(cors(corsOptions));
 // ✅ Handle preflight OPTIONS requests globally
 app.options('*', cors(corsOptions));
 
+/**
+ * 🐞 ✅ Debugging: log all incoming requests for troubleshooting
+ */
+app.use((req, res, next) => {
+  console.log(`➡️ Incoming request: ${req.method} ${req.url}`);
+  next();
+});
+
 // 🔓 Global Middleware
 app.use(express.json()); // Parse incoming JSON data
 app.use(express.urlencoded({ extended: true })); // Handle form-data if any
