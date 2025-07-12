@@ -16,26 +16,31 @@ connectDB();
 const app = express();
 
 /**
- * 🔧 ✅ Final stable CORS configuration (handles preflight OPTIONS requests safely)
+ * 🔧 ✅ Final stable CORS configuration
+ * - Handles preflight OPTIONS requests
+ * - Sends proper Access-Control-Allow-Origin header
+ * - Supports credentials securely
  */
 const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
 
 const corsOptions = {
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps, curl, Postman)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    // Allow requests with no origin (like Postman) or from allowedOrigins
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS for preflight
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS
   credentials: true,
 };
 
-// ✅ Apply CORS globally before routes
+// ✅ Apply CORS globally before all routes
 app.use(cors(corsOptions));
-app.options('*', cors(corsOptions)); // handle preflight OPTIONS requests globally
+
+// ✅ Handle preflight OPTIONS requests globally
+app.options('*', cors(corsOptions));
 
 // 🔓 Global Middleware
 app.use(express.json()); // Parse incoming JSON data
@@ -52,7 +57,7 @@ app.use('/api/applications', require('./routes/applicationRoutes')); // Job appl
 // 🛠️ Global Error Handler (Optional but helpful)
 app.use((err, req, res, next) => {
   console.error("❌ Server Error:", err);
-  res.status(500).json({ message: 'Something went wrong on the server!' });
+  res.status(500).json({ message: 'Something went wrong on the server!', error: err.message });
 });
 
 // 🌍 Start the Server
