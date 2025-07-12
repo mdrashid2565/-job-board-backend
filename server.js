@@ -21,10 +21,11 @@ const app = express();
 const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
 
 app.use(cors({
-  origin: allowedOrigins,
+  origin: 'https://delightful-cupcake-2db337.netlify.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
+
 
 // 🔓 Global Middleware
 app.use(express.json()); // Parse incoming JSON data
