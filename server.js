@@ -21,19 +21,12 @@ const app = express();
  * - Sends proper Access-Control-Allow-Origin header
  * - Supports credentials securely
  */
-const allowedOrigins = ['https://delightful-cupcake-2db337.netlify.app'];
-
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like Postman) or from allowedOrigins
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: 'https://delightful-cupcake-2db337.netlify.app', // ✅ direct string for stable deployment
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // include OPTIONS
-  credentials: true,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true, // if using cookies in future
+  optionsSuccessStatus: 200,
 };
 
 // ✅ Apply CORS globally before all routes
